@@ -3,13 +3,18 @@ kind: Ingress
 metadata:
   name: notes-app-ingress
   annotations:
+    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+        rewrite ^/delete /delete break;
+        rewrite ^/update /update break;
 spec:
-  ingressClassName: nginx-example
   rules:
-    - http:
+    - host: notes.application
+      http:
         paths:
-          - path: /
+          - path: /*
             pathType: Prefix
             backend:
               service:
